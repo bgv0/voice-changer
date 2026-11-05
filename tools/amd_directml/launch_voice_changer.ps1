@@ -10,7 +10,7 @@ $Port = 18888
 $Settings = [ordered]@{
     silentThreshold      = 0.001   # gate; the gate-hold patch keeps word endings
     protect              = 0.33    # keeps breaths/consonants from going robotic
-    extraConvertSize     = 32768   # more context per chunk = steadier voice
+    extraConvertSize     = 16384   # context per chunk; 32768 was worse in practice
     crossFadeOverlapSize = 8192    # smoother joins between chunks
     serverReadChunkSize  = 192     # 512 ms; use 128 for less delay if your PC keeps up
 }
