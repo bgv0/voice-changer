@@ -37,6 +37,8 @@ for f in os.listdir(os.path.join(HERE, "vc_patches")):
     if f.endswith(".py") and f != "pathlib_hook.py":
         shutil.copy2(os.path.join(HERE, "vc_patches", f), dst)
         print("copied", f)
+shutil.copy2(os.path.join(HERE, "launch_voice_changer.ps1"), app)
+print("copied launch_voice_changer.ps1")
 
 # 2. hook in base_library.zip (always rebuilt from the untouched backup)
 if not os.path.exists(bak):

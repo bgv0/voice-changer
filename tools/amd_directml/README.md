@@ -42,6 +42,33 @@ With the patch, chunk 128 (341 ms) runs at ~4x headroom on a 48k model with an
 index. Chunk 96 was much slower than expected (likely DirectML re-compiling for
 changing input sizes), so 128 is the practical floor here.
 
+## Gate hold (end of sentence cut off)
+
+`vc_patches/RVCr2_post.py` patches `RVCr2.inference` after the bundled module
+loads. The stock silence gate judges each whole chunk by its RMS, so a chunk
+holding the last word plus silence can fall under the threshold and get muted
+entirely. The patch keeps the gate open for 0.8 s after the input was last
+above the threshold.
+
+The hook also makes the app's stdout line-buffered (otherwise its prints never
+reach a log) and writes `vc_patches/vc_patches.log`, which shows what loaded.
+
+## Launcher (settings the app forgets)
+
+The app stores server-audio, crossfade, threshold and extra settings but never
+re-applies them at startup (that loop is commented out), and protect resets on
+every launch. `launch_voice_changer.ps1` (copied next to the exe by the
+installer) starts the server, sets it to High priority, then pushes the
+settings at the top of the script through the REST API, including server audio
+mode with devices found by name (WASAPI). Point a shortcut at:
+
+```
+powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -File "<...>\MMVCServerSIO\launch_voice_changer.ps1"
+```
+
+Server audio mode matters while gaming: in client mode audio round-trips
+through the app window and stutters when a game loads the GPU/CPU.
+
 ## Other tools
 
 * `add_model.sh` - add a `.pth` (+ `.index`) to a running server as an ONNX slot
