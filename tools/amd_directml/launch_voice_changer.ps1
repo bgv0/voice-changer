@@ -8,14 +8,14 @@
 # Edit the settings here.
 $Port = 18888
 $Settings = [ordered]@{
-    silentThreshold      = 0.001   # gate; the gate-hold patch keeps word endings
+    silentThreshold      = 0.006   # gate; above mic hiss (mic at 100%), below speech
     protect              = 0.33    # keeps breaths/consonants from going robotic
     extraConvertSize     = 16384   # context per chunk; 32768 was worse in practice
     crossFadeOverlapSize = 8192    # smoother joins between chunks
     serverReadChunkSize  = 192     # 512 ms; use 128 for less delay if your PC keeps up
 }
 # Server audio (audio handled by the server itself, not the app window).
-$UseServerAudio = $true
+$UseServerAudio = $false  # set $true to let the server handle audio itself
 $InputName   = "HyperX QuadCast S"      # mic
 $OutputName  = "CABLE Input"            # what Discord hears (CABLE Output)
 $MonitorName = "Speakers (Realtek"      # where you hear yourself; "" for none
